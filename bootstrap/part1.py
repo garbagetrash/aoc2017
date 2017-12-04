@@ -3,13 +3,11 @@ import sys
 
 
 def func1(in_file):
-    vals = []
     with open(in_file) as f:
         in_string = f.read().strip()
-        for c in in_string:
-            vals.append(int(c))
+        # str_list = list(map(lambda x: x.strip(), f.readlines()))
 
-    return 0
+    return in_string
 
 
 if __name__ == '__main__':
