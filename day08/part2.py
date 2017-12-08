@@ -53,7 +53,6 @@ def parse_line(line):
     if reg not in regs:
         regs[reg] = 0
 
-    regs[cond_reg]
     cond = words[5]
     value = words[6]
     if parse_cond(cond, value, cond_reg):
