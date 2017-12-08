@@ -6,39 +6,7 @@ regs = {}
 
 
 def parse_cond(cond, value, cond_reg):
-    if cond == '>':
-        if regs[cond_reg] > int(value):
-            return True
-        else:
-            return False
-    elif cond == '<':
-        if regs[cond_reg] < int(value):
-            return True
-        else:
-            return False
-    elif cond == '>=':
-        if regs[cond_reg] >= int(value):
-            return True
-        else:
-            return False
-    elif cond == '<=':
-        if regs[cond_reg] <= int(value):
-            return True
-        else:
-            return False
-    elif cond == '==':
-        if regs[cond_reg] == int(value):
-            return True
-        else:
-            return False
-    elif cond == '!=':
-        if regs[cond_reg] != int(value):
-            return True
-        else:
-            return False
-    else:
-        print('wat: {}, {}'.format(cond, value))
-        return None
+    return eval(''.join(str(regs[cond_reg]) + cond + value))
 
 
 def parse_line(line):
