@@ -1,29 +1,21 @@
 #!/usr/bin/python
 import sys
+import numpy as np
 
 
-def func1(arg):
-    return 0
+def inverse_captcha(input_string):
+    vals = np.array([int(c) for c in input_string])
+    truth_arr = [vals[i] == vals[(i + 1) % len(vals)] for i in range(len(vals))]
 
-
-def count_digit_sums(in_file):
-    vals = []
-    with open(in_file) as f:
-        in_string = f.read().strip()
-        for c in in_string:
-            vals.append(int(c))
-
-    total_sum = 0
-    for i in range(len(vals) - 1):
-        if vals[i] == vals[i + 1]:
-            total_sum += vals[i]
-
-    if vals[-1] == vals[0]:
-        total_sum += vals[-1]
-
-    return total_sum
+    return sum(vals[truth_arr])
 
 
 if __name__ == '__main__':
-    total_sum = count_digit_sums(sys.argv[1])
-    print('Total sum: {}'.format(total_sum))
+    assert inverse_captcha('1122') == 3
+    assert inverse_captcha('1111') == 4
+    assert inverse_captcha('1234') == 0
+    assert inverse_captcha('91212129') == 9
+
+    with open(sys.argv[1]) as f:
+        output = inverse_captcha(f.read().strip())
+        print('Output: {}'.format(output))

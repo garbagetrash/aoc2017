@@ -1,26 +1,23 @@
 #!/usr/bin/python
 import sys
+import numpy as np
 
 
-def count_digit_sums(in_file):
-    vals = []
-    with open(in_file) as f:
-        in_string = f.read().strip()
-        for c in in_string:
-            vals.append(int(c))
-
-    total_sum = 0
+def inverse_captcha(input_string):
+    vals = np.array([int(c) for c in input_string])
     halfway = int(len(vals) / 2)
-    for i in range(len(vals) - 1):
-        if vals[i] == vals[(i + halfway) % len(vals)]:
-            total_sum += vals[i]
+    truth_arr = [vals[i] == vals[(i + halfway) % len(vals)] for i in range(len(vals))]
 
-    if vals[-1] == vals[halfway - 1]:
-        total_sum += vals[-1]
-
-    return total_sum
+    return sum(vals[truth_arr])
 
 
 if __name__ == '__main__':
-    total_sum = count_digit_sums(sys.argv[1])
-    print('Total sum: {}'.format(total_sum))
+    assert inverse_captcha('1212') == 6
+    assert inverse_captcha('1221') == 0
+    assert inverse_captcha('123425') == 4
+    assert inverse_captcha('123123') == 12
+    assert inverse_captcha('12131415') == 4
+
+    with open(sys.argv[1]) as f:
+        output = inverse_captcha(f.read().strip())
+        print('Output: {}'.format(output))
