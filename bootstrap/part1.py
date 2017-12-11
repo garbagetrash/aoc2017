@@ -2,14 +2,15 @@
 import sys
 
 
-def func1(in_file):
-    with open(in_file) as f:
-        in_string = f.read().strip()
-        # str_list = list(map(lambda x: x.strip(), f.readlines()))
+def name(input_string):
 
-    return in_string
+    return False
 
 
 if __name__ == '__main__':
-    output = func1(sys.argv[1])
-    print('Output: {}'.format(output))
+    assert name('input_string') is False
+
+    with open(sys.argv[1]) as f:
+        output = name(f.read().strip())
+        # output = name([l.strip() for l in f.readlines()])
+        print('Output: {}'.format(output))
