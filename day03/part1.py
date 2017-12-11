@@ -1,20 +1,17 @@
 #!/usr/bin/python
+import sys
 
 
-vals = {}
+def spiral_memory(input_value):
 
-
-def find_dist(input_value):
-
+    vals = {}
     x = 0
     y = 0
-    pos = (x, y)
-    vals[pos] = 1
+    cnt = 1
     xlim = 1
     ylim = 1
     dx = 1
     dy = 0
-    cnt = 2
     while True:
         if abs(dx) > 0 and abs(x) < xlim or abs(dy) > 0 and abs(y) < ylim:
             pass
@@ -34,18 +31,25 @@ def find_dist(input_value):
                 dy = 0
                 xlim += 1
                 ylim += 1
-        x += dx
-        y += dy
         pos = (x, y)
         if pos in vals:
-            raise ValueError
+            raise ValueError('Position {} should not already be in dictionary'.format(pos))
         vals[pos] = cnt
-        cnt += 1
 
         if vals[pos] == input_value:
-            print(abs(x) + abs(y))
-            break
+            return abs(x) + abs(y)
+
+        x += dx
+        y += dy
+        cnt += 1
 
 
 if __name__ == '__main__':
-    find_dist(325489)
+    assert spiral_memory(1) == 0
+    assert spiral_memory(12) == 3
+    assert spiral_memory(23) == 2
+    assert spiral_memory(1024) == 31
+
+    with open(sys.argv[1]) as f:
+        output = spiral_memory(int(f.read().strip()))
+        print('Output: {}'.format(output))
