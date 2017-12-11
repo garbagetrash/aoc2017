@@ -2,20 +2,24 @@
 import sys
 
 
-def sum_divs(in_file):
-    sumof = []
-    with open(in_file) as f:
-        str_list = list(map(lambda x: x.strip(), f.readlines()))
-        for s in str_list:
-            line = list(map(lambda x: float(x), s.split()))
-            for i in range(len(line)):
-                for j in range(len(line)):
-                    if line[i] % line[j] == 0 and i != j:
-                        sumof.append(line[i] / line[j])
+def divides(row):
+    for i, j in [[i, j] for i in row for j in row if i != j]:
+        if i % j == 0:
+            return i / j
 
-    return sum(sumof)
+
+def checksum(list_of_strings):
+    rows = [list(map(lambda x: float(x), line.split())) for line in list_of_strings]
+
+    return sum([divides(row) for row in rows])
 
 
 if __name__ == '__main__':
-    output = sum_divs(sys.argv[1])
-    print('Output: {}'.format(output))
+    assert checksum(['5 9 2 8']) == 4
+    assert checksum(['9 4 7 3']) == 3
+    assert checksum(['3 8 6 5']) == 2
+    assert checksum(['5 9 2 8', '9 4 7 3', '3 8 6 5']) == 9
+
+    with open(sys.argv[1]) as f:
+        output = checksum([l.strip() for l in f.readlines()])
+        print('Output: {}'.format(output))
