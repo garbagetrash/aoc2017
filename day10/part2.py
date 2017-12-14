@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from numba import jit
+import numpy as np
 import sys
 
 
@@ -6,11 +8,27 @@ def rotate(l, n):
     return l[n:] + l[:n]
 
 
+@jit
+def flip(my_list, curr_pos, l):
+    if l % 2 == 0:
+        r = l / 2
+    else:
+        r = (l - 1) / 2
+
+    for i in range(int(r)):
+        start_idx = (curr_pos + i) % len(my_list)
+        stop_idx = (curr_pos + l - i - 1) % len(my_list)
+        temp = my_list[start_idx]
+        my_list[start_idx] = my_list[stop_idx]
+        my_list[stop_idx] = temp
+
+    return my_list
+
+
+@jit
 def hash_round(curr_pos, skip, lengths, my_list):
     for l in lengths:
-        temp = list(reversed(rotate(my_list, curr_pos)[:l]))
-        for i, v in enumerate(temp):
-            my_list[(curr_pos + i) % len(my_list)] = v
+        my_list = flip(my_list, curr_pos, l)
         curr_pos += l + skip
         while curr_pos > len(my_list):
             curr_pos -= len(my_list)
@@ -19,11 +37,11 @@ def hash_round(curr_pos, skip, lengths, my_list):
     return curr_pos, skip, my_list
 
 
-def knot_hash(input_string, circular_list_len):
+def knot_hash(input_string, circular_list_len=256):
     lengths = [ord(c) for c in input_string]
     lengths = lengths + [17, 31, 73, 47, 23]
 
-    my_list = list(range(circular_list_len))
+    my_list = np.array(list(range(circular_list_len)))
     curr_pos = 0
     skip = 0
     for t in range(64):
